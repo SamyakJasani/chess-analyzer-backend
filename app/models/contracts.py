@@ -57,10 +57,20 @@ class Game(APIModel):
     eco: str | None = None
 
 
+class Pagination(APIModel):
+    page: int
+    page_size: int
+    total_games: int
+    total_pages: int
+    has_next: bool
+    has_previous: bool
+
+
 class GamesResponse(APIModel):
     username: str
     archive: str | None = None
     games: list[Game]
+    pagination: Pagination
 
 
 class HealthResponse(BaseModel):
