@@ -1,0 +1,37 @@
+name: Deploy Backend to VM
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to deploy"
+        required: true
+        default: "main"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy backend to VM
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USERNAME }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          script: |
+            cd "/home/samyak/chess-analyzer-backend"
+
+            echo "Switching to selected branch..."
+            git checkout "${{ github.event.inputs.branch }}"
+
+            echo "Pulling latest code..."
+            git pull origin "${{ github.event.inputs.branch }}"
+
+            echo "Stopping Docker containers..."
+            docker compose down
+
+            echo "Building and starting Docker containers..."
+            docker compose up -d --build
+
+            echo "Backend VM deployment completed."
