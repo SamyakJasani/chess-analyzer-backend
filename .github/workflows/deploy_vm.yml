@@ -21,7 +21,6 @@ jobs:
           key: ${{ secrets.VM_SSH_KEY }}
           script: |
             sudo -n bash -s <<'REMOTE_DEPLOY'
-            git config --global --add safe.directory /home/samyak/chess-analyzer-backend
             cd "/home/samyak/chess-analyzer-backend"
 
             echo "Switching to selected branch..."
